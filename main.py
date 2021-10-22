@@ -2,6 +2,10 @@ import discord
 import os
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+from keep_alive import keep_alive
+import random
+import io
+import aiohttp
 
 client = discord.Client()
 
@@ -16,6 +20,36 @@ async def on_message(message):
 
     if message.content.startswith('$howdy'):
         await message.channel.send('Howdy!')
+
+    if message.content.startswith('$Love'):
+      card_num = random.randint(1, 22)
+      url = "https://www.horoscope.com/images-US/tarot/card_150x285-GoldenRider-Horoscope-" + str(card_num) + ".jpg"
+      async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            if resp.status != 200:
+                await message.channel.send('Could not download file...')
+            data = io.BytesIO(await resp.read())
+            await message.channel.send(file=discord.File(data, 'cool_image.png'))
+
+    if message.content.startswith('$Mood'):
+      card_num = random.randint(1, 22)
+      url = "https://www.horoscope.com/images-US/tarot/card_150x285-GoldenRider-Horoscope-" + str(card_num) + ".jpg"
+      async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            if resp.status != 200:
+                await message.channel.send('Could not download file...')
+            data = io.BytesIO(await resp.read())
+            await message.channel.send(file=discord.File(data, 'cool_image.png'))
+
+    if message.content.startswith('$Career'):
+      card_num = random.randint(1, 22)
+      url = "https://www.horoscope.com/images-US/tarot/card_150x285-GoldenRider-Horoscope-" + str(card_num) + ".jpg"
+      async with aiohttp.ClientSession() as session:
+        async with session.get(url) as resp:
+            if resp.status != 200:
+                await message.channel.send('Could not download file...')
+            data = io.BytesIO(await resp.read())
+            await message.channel.send(file=discord.File(data, 'cool_image.png'))
 
     if message.content.startswith('$Aries'):
       url = "https://www.horoscope.com/star-ratings/today/aries"
@@ -304,7 +338,10 @@ async def on_message(message):
         if count == 19:
           article = article + ' success\n'
       await message.channel.send(article)
+
+    if message.content.startswith('$help'):
+      article = 'Get your daily star rating by sending $YourSign.\nExample: $Virgo'
+      await message.channel.send(article)
       
-
+keep_alive()
 client.run(os.getenv('TOKEN'))     
-
